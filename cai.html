@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e8edef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #calculator {
+            background-color: #9dddf3;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 300px;
+            max-width: 100%;
+            border-style:solid;
+            border-radius: 8px;
+        }
+
+        #output {
+            padding: 10px;
+            text-align: right;
+            font-size: 1.5em;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        border: 5px;
+       
+        }
+
+        button {
+            padding: 15px;
+            font-size: 1em;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-style:solid;
+            border-radius: 8px;
+        }
+
+        button.operator {
+            background-color: #3498db;
+            color: #131212;
+        }
+
+        button.equal {
+            background-color: #2ecc71;
+            color: #0c0c0c;
+        }
+
+        button.clear {
+            background-color: #e82b0a;
+            color: #121111;
+        }
+
+        button:hover {
+            background-color: #bff728;
+            
+        }
+        button.t{
+            width: 285%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="calculator">
+        <div id="output">0</div>
+        <div id="buttons">
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button class="operator" onclick="setOperator('/')">/</button>
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button class="operator" onclick="setOperator('*')">*</button>
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button class="operator" onclick="setOperator('-')">-</button>
+            <button onclick="appendNumber('0')">0</button>
+            <button onclick="appendDecimal()">.</button>
+            <button class="equal" onclick="calculate()">=</button>
+            <button class="operator" onclick="setOperator('+')">+</button>
+            <button class="clear" onclick="clearCalculator()">C</button>
+            <button class="t" onclick="appendNumber('Thank You')">Thank you</button>
+        </div>
+    </div>
+
+    <script>
+        let currentInput = '0';
+        let operator = null;
+        let firstOperand = null;
+
+        function appendNumber(number) {
+            if (currentInput === '0') {
+                currentInput = number;
+            } else {
+                currentInput += number;
+            }
+            updateOutput();
+        }
+
+        function appendDecimal() {
+            if (!currentInput.includes('.')) {
+                currentInput += '.';
+                updateOutput();
+            }
+        }
+
+        function setOperator(newOperator) {
+            if (operator !== null) {
+                calculate();
+            }
+            firstOperand = parseFloat(currentInput);
+            operator = newOperator;
+            currentInput = '0';
+        }
+
+        function calculate() {
+            if (operator === null || currentInput === 'Error') {
+                return;
+            }
+            const secondOperand = parseFloat(currentInput);
+            switch (operator) {
+                case '+':
+                    currentInput = (firstOperand + secondOperand).toString();
+                    break;
+                case '-':
+                    currentInput = (firstOperand - secondOperand).toString();
+                    break;
+                case '*':
+                    currentInput = (firstOperand * secondOperand).toString();
+                    break;
+                case '/':
+                    if (secondOperand !== 0) {
+                        currentInput = (firstOperand / secondOperand).toString();
+                    } else {
+                        currentInput = 'Error';
+                    }
+                    break;
+            }
+            operator = null;
+            firstOperand = null;
+            updateOutput();
+        }
+
+        function clearCalculator() {
+            currentInput = '0';
+            operator = null;
+            firstOperand = null;
+            updateOutput();
+        }
+
+        function updateOutput() {
+            document.getElementById('output').textContent = currentInput;
+        }
+    </script>
+
+</body>
+
+</html>
